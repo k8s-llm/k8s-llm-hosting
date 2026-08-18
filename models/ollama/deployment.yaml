@@ -18,7 +18,10 @@ spec:
         app: ollama
     spec:
       containers:
-      - image: ollama/ollama
+      - env:
+        - name: OLLAMA_MODELS
+          value: /data/models/ollama
+        image: ollama/ollama
         name: ollama
         ports:
           - containerPort: 11434
@@ -31,4 +34,27 @@ spec:
           limits:
             nvidia.com/gpu: 1
             memory: 4096M
+        volumeMounts:
+          - name: models-ro
+            mountPath: /data/models
+            readOnly: false
+      volumes:
+        - name: models-ro
+          persistentVolumeClaim:
+            claimName: models-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ollama
+  name: ollama
+spec:
+  ports:
+  - port: 11434
+    protocol: TCP
+    targetPort: 11434
+  selector:
+    app: ollama
+---
 

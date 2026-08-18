@@ -16,4 +16,19 @@ kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.
 https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 https://github.com/nvidia/nvkind
 
+----
+
+I think the first is not enough:
+
+helm upgrade -i \
+    --kube-context=kind-${KIND_CLUSTER_NAME} \
+    --namespace gpu-operator \
+    --create-namespace \
+    --wait \
+    nvidia-gpu-operator nvidia/gpu-operator \
+    --set cdi.enabled=true \
+    --set driver.enabled=false \
+    --set toolkit.enabled=false \
+    --set operator.runtimeClass=nvidia
+
 

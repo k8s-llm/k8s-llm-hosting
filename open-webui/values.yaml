@@ -1,3 +1,5 @@
 ollama:
   enabled: false
+ollamaUrls:
+  - http://ollama.default.svc.cluster.local:11434
 
