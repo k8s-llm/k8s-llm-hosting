@@ -22,3 +22,19 @@ helm upgrade -i \
     --set operator.runtimeClass=nvidia
 ```
 
+
+## Applying time slicing to share a GPU between pods
+
+create configmap
+
+`kubectl create -f time-slicing-config-all.yaml -n gpu-operator`
+
+and patch the plugin using:
+```bash
+kubectl patch clusterpolicies.nvidia.com/cluster-policy \
+    -n gpu-operator --type merge \
+    -p '{"spec": {"devicePlugin": {"config": {"name": "time-slicing-config-fine"}}}}'
+```
+
+After running this, describing a worker node should show availability for 4 GPUs, not only one.
+
