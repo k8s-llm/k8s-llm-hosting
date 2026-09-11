@@ -1,0 +1,40 @@
+apiVersion: llmmodel.host-llm.io/v1alpha1
+kind: Model
+metadata:
+  labels:
+    app.kubernetes.io/name: &ollama-qwen3 ollama-qwen3-ro
+    app.kubernetes.io/managed-by: kustomize
+  name: *ollama-qwen3
+  namespace: default
+spec:
+  provider: Ollama
+  llmModel:
+    name: qwen3
+    version: 0.6b
+  maxReplicas: 1
+  minReplicas: 1
+  targetNamespace: default
+  persistentVolumeClaimRef: models-pvc
+  mountPath: /data/models
+  modelPath: ollama/qwen3-0.6b
+---
+apiVersion: llmmodel.host-llm.io/v1alpha1
+kind: Model
+metadata:
+  labels:
+    app.kubernetes.io/name: &ollama-coder ollama-qwen-coder
+    app.kubernetes.io/managed-by: kustomize
+  name: *ollama-coder
+  namespace: default
+spec:
+  provider: Ollama
+  llmModel:
+    name: qwen2.5-coder
+    version: 1.5b
+  maxReplicas: 1
+  minReplicas: 1
+  targetNamespace: default
+  persistentVolumeClaimRef: models-pvc
+  mountPath: /data/models
+  modelPath: ollama/qwen2.5-coder-1.5b
+
