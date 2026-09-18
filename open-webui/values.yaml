@@ -3,3 +3,37 @@ ollama:
 ollamaUrls:
   - http://ollama.default.svc.cluster.local:11434
 
+enableOpenaiApi: true
+openaiBaseApiUrls: 
+  - http://traefik.traefik.svc:80/v1
+  - http://traefik.traefik.svc:80/v1/
+openaiApiKeys:
+  - ollama
+  - ollama
+extraEnvVars:
+  # Pass Open WebUI user identity (Name, Email, ID, Role) to the upstream API.
+  # Highly useful if routing through LiteLLM or Portkey for user-level rate limiting.
+  - name: ENABLE_FORWARD_USER_INFO_HEADERS
+    value: "True"
+
+  # Force Open WebUI to prioritize these environment variables over values 
+  # it may have already saved to its internal database on previous runs.
+  - name: ENABLE_PERSISTENT_CONFIG
+    value: "False"
+
+  - name: OPENAI_API_CONFIGS
+    value: >-
+      {
+        "http://traefik.traefik.svc:80/v1": {
+          "headers": { 
+            "Authorization": "Bearer ollama",
+            "X-Model": "qwen3"
+          }
+        },
+        "http://traefik.traefik.svc:80/v1/": {
+          "headers": {
+            "Authorization": "Bearer ollama",
+            "X-Model": "qwen-coder"
+          }
+        }
+      }

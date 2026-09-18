@@ -53,6 +53,14 @@ Have in mind that grafana should get some business metrics in order to feed hpa 
 Should we need it? Sure ... I'd trust Otari, would it run ok.
 
 
+## Installing a local test
+
+1) Install Gateway API dependencies
+2) Install Traefik 
+3) Download Models
+4) Install Model CRs
+5) Install Routes
+6) Install OpenWebUI
 
 
 ## Software used

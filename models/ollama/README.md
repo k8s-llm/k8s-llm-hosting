@@ -9,7 +9,8 @@ Then downloaded a light qwen model:
 
 ---
 
-different-ollamas.yaml is a file that creates deployments to download specific models. 
+different-ollamas.yaml is a file that creates deployments to download specific models.
+ 
 That can be used as pods and use them only for that purpose, or even create them as jobs that would load ollama, pull the model and exit. Don't even need to run over GPU.
 
 ---
