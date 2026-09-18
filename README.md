@@ -56,12 +56,80 @@ Should we need it? Sure ... I'd trust Otari, would it run ok.
 ## Installing a local test
 
 1) Install Gateway API dependencies
+
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/standard-install.yaml
+
 2) Install Traefik 
+
+In routing/traefik directory:
+```bash
+helm repo add traefik https://traefik.github.io/charts
+helm repo update
+helm install traefik traefik/traefik -f values.yaml -n traefik --create-namespace
+```
+
+4) Create Volume Claim
+
+Execute:
+```bash
+kubectl apply -f models/volume.yaml
+```
+
 3) Download Models
+
+Execute:
+```bash
+kubectl apply -f models/ollama/different-ollamas.yaml 
+```
+
+Then for each one of the pods running, download the respective model. i.e.:
+
+```bash
+kubectl exec ollama-qwen2.5-coder-1.5b-xxxxxxxxxx-xxxxx -- ollama pull qwen2.5-coder:1.5b
+kubectl exec ollama-qwnen3-0.6b-xxxxxxxxxx-xxxxx -- ollama pull qwen3:0.6b
+```
+
+After downloading, you can remove the deployments. This can be done by pods that finish download and are finished.
+
+Removal can be done by using:
+```bash
+kubectl delete -f models/ollama/different-ollamas.yaml
+```
+
 4) Install Model CRs
+
+Install CRDs using:
+```bash
+kubectl apply -f https://raw.githubusercontent.com/k8s-llm/k8s-model-operator/main/dist/install.yaml
+```
+
+Then run 
+```bash
+kubectl apply -f models/ollama/llmmodel_v1alpha1_model.yaml
+```
+
 5) Install Routes
+Run:
+
+```bash
+kubectl apply -f routing/routes.yaml
+```
+
 6) Install OpenWebUI
 
+```bash
+helm repo add open-webui https://open-webui.github.io/helm-charts
+helm repo update
+helm install openwebui open-webui/open-webui -f open-webui/values.yaml
+```
+
+In order to test installation, you can create a port-forward to open-webui server:
+
+```bash
+kubectl port-forward svc/openwebui-open-webui 8080:80
+```
+
+And connect via browser to http://127.0.0.1:8080
 
 ## Software used
 Ollama as a container
