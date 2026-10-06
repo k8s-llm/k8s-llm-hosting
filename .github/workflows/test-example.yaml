@@ -4,7 +4,7 @@ on:
     branches:
       - test/*
       - testing/*
-      - gitub-action-setup
+      - github-action-setup
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
