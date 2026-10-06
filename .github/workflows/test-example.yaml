@@ -73,6 +73,7 @@ jobs:
           
           echo "Error: Operator Deployment not ready after 2 mins"
           kubectl describe deployment k8s-model-operator-controller-manager -n k8s-model-operator-system
+          kubectl describe pod -n k8s-model-operator-system
           exit 1
           # install models controller
           kubectl apply -f models/ollama/llmmodel_v1alpha1_model.yaml
