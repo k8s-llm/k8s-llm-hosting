@@ -1,0 +1,72 @@
+name: Installs models in a cluster and tests model installation and routing
+on:
+  push:
+    branches:
+      - test/*
+      - testing/*
+      - gitub-action-setup
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Kubernetes
+        uses: helm/kind-action@v1.14.0
+        with:
+          cluster_name: routeapi-cluster
+          registry: true
+
+      - name: Install traefik
+        run: |
+          kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/standard-install.yaml
+          helm repo add traefik https://traefik.github.io/charts
+          helm repo update
+          helm install traefik traefik/traefik -f routing/traefik/values.yaml -n traefik --create-namespace --version 37.3.0
+ 
+      - name: Create Volume Claim
+        run: |
+          kubetl apply -f models/volume.yaml
+
+      - name: Download models
+        run: |
+          kubectl apply -f models/ollama/different-ollamas.yaml
+          kubectl exec $(k get pod -l app=ollama-qwen-coder -o jsopath='{.items[0].metadata.name}') -- ollama pull qwen2.5-coder:1.5b
+        kubectl exec $(k get pod -l app=ollama-qwen3-ro jsopath='{.items[0].metadata.name}') -- ollama pull qwen3:0.6b
+          kubectl delete -f models/ollama/different-ollamas.yaml
+
+      - name: Install apps in cluster
+        run: |
+          docker pull ghcr.io/k8s-llm/k8s-model-operator:latest
+          kind load k8s-model-operator:latest
+          kubectl apply -f https://raw.githubusercontent.com/k8s-llm/k8s-model-operator/main/dist/install.yaml
+          # install models controller
+          
+          kubectl apply -f models/ollama/llmmodel_v1alpha1_model.yaml
+
+      - name: Start Port-Forward
+        run: |
+          kubectl port-forward svc/traefik -n traefik  8080:80 > pf.log 2>&1 &
+          
+          # Save the process ID (PID) if you need to kill it explicitly later
+          echo "PF_PID=$!" >> $GITHUB_ENV
+          
+          # Health check loop: Wait up to 30 seconds for localhost:8080 to become responsive
+          echo "Waiting for port-forward to establish..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8080 > /dev/null; then
+              echo "Port-forward is ready!"
+              exit 0
+            fi
+            sleep 1
+          done
+          
+          echo "Error: Port-forward failed to become ready"
+          cat pf.log
+          exit 1
+# tests
+      - name: Install sample app and routes
+        run: |
+          curl "http://127.0.0.1:8080/chat" -H "X-Model:qwen-coder"
+
