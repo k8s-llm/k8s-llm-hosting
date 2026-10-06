@@ -101,5 +101,5 @@ jobs:
 # tests
       - name: Install sample app and routes
         run: |
-          curl "http://127.0.0.1:8080/chat" -H "X-Model:qwen-coder"
+          curl "http://127.0.0.1:8080/v1/models" -H "X-Model:qwen-coder"
 
