@@ -58,7 +58,7 @@ jobs:
       - name: Install Model Operator in cluster and Models
         run: |
           docker pull ghcr.io/k8s-llm/k8s-model-operator:latest
-          kind load docker-image k8s-model-operator:latest
+          kind load docker-image ghcr.io/k8s-llm/k8s-model-operator:latest --name routeapi-cluster
           kubectl apply -f https://raw.githubusercontent.com/k8s-llm/k8s-model-operator/main/dist/install.yaml
 
           echo "Waiting for operator deployment to be ready..."
