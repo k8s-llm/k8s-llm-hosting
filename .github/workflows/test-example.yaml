@@ -20,7 +20,7 @@ jobs:
 
       - name: Install traefik
         run: |
-          kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/standard-install.yaml
+          kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.2/standard-install.yaml
           helm repo add traefik https://traefik.github.io/charts
           helm repo update
           helm install traefik traefik/traefik -f routing/traefik/values.yaml -n traefik --create-namespace --version 37.3.0
