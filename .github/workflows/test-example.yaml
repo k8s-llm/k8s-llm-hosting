@@ -42,7 +42,8 @@ jobs:
           kind load k8s-model-operator:latest
           kubectl apply -f https://raw.githubusercontent.com/k8s-llm/k8s-model-operator/main/dist/install.yaml
           # install models controller
-          
+          sed -i -e "s/4096/1024/g"  models/ollama/different-ollamas.yaml
+          set -i -e "s/nvidia.com\/gpu/cpu/g" models/ollama/different-ollamas.yaml
           kubectl apply -f models/ollama/llmmodel_v1alpha1_model.yaml
 
       - name: Start Port-Forward
