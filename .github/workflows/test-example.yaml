@@ -55,11 +55,25 @@ jobs:
           kubectl exec $(kubectl get pod -l app=ollama-qwnen3-0.6b jsonpath='{.items[0].metadata.name}') -- ollama pull qwen3:0.6b
           kubectl delete -f models/ollama/different-ollamas.yaml
 
-      - name: Install apps in cluster
+      - name: Install Model Operator in cluster and Models
         run: |
           docker pull ghcr.io/k8s-llm/k8s-model-operator:latest
-          kind load k8s-model-operator:latest
+          kind load docker-image k8s-model-operator:latest
           kubectl apply -f https://raw.githubusercontent.com/k8s-llm/k8s-model-operator/main/dist/install.yaml
+
+          echo "Waiting for operator deployment to be ready..."
+          for i in {1..24}; do
+            d1_status=$(kubectl get deployment k8s-model-operator-controller-manager -n k8s-model-operator-system -o jsonpath='{.status.conditions[?(@.type=="Available")].status}')
+            if [[ "$d1_status" == "True" ]]; then
+              echo "Deployments are ready!!"
+              exit 0
+            fi
+            sleep 5
+          done
+          
+          echo "Error: Operator Deployment not ready after 2 mins"
+          kubectl describe deployment k8s-model-operator-controller-manager -n k8s-model-operator-system
+          exit 1
           # install models controller
           kubectl apply -f models/ollama/llmmodel_v1alpha1_model.yaml
 
