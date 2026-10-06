@@ -33,7 +33,7 @@ jobs:
         run: |
           kubectl apply -f models/ollama/different-ollamas.yaml
           kubectl exec $(k get pod -l app=ollama-qwen-coder -o jsopath='{.items[0].metadata.name}') -- ollama pull qwen2.5-coder:1.5b
-        kubectl exec $(k get pod -l app=ollama-qwen3-ro jsopath='{.items[0].metadata.name}') -- ollama pull qwen3:0.6b
+         kubectl exec $(k get pod -l app=ollama-qwen3-ro jsopath='{.items[0].metadata.name}') -- ollama pull qwen3:0.6b
           kubectl delete -f models/ollama/different-ollamas.yaml
 
       - name: Install apps in cluster
