@@ -7,9 +7,11 @@ I want to install openwebui without ollama included in it, since I want to have 
 Helm documentation: https://github.com/open-webui/helm-charts/blob/main/charts/open-webui/README.md
 
 
-
-
 https://docs.openwebui.com/getting-started/quick-start#helm-steps
+
+## Route configuration 
+
+Check that routes to models are configured in values.yaml. In our case, we are creating external name Services, so we have different urls for each model implemented. Configuring endpoints with equal url is not supported via values.yaml, so this is a great solution.
 
 ```
 helm repo add open-webui https://open-webui.github.io/helm-charts
