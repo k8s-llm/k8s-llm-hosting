@@ -5,8 +5,8 @@ ollamaUrls:
 
 enableOpenaiApi: true
 openaiBaseApiUrls: 
-  - http://traefik.traefik.svc:80/v1
-  - http://traefik.traefik.svc:80/v1/
+  - http://ollama-qwen3-06b.default.svc.cluster.local:80/v1
+  - http://ollama-qwen25-coder.default.svc.cluster.local:80/v1/
 openaiApiKeys:
   - ollama
   - ollama
@@ -24,13 +24,13 @@ extraEnvVars:
   - name: OPENAI_API_CONFIGS
     value: >-
       {
-        "http://traefik.traefik.svc:80/v1": {
+        "http://ollama-qwen3-06b.default.svc.cluster.local:80/v1": {
           "headers": { 
             "Authorization": "Bearer ollama",
             "X-Model": "qwen3"
           }
         },
-        "http://traefik.traefik.svc:80/v1/": {
+        "http://ollama-qwen25-coder.default.svc.cluster.local:80/v1/": {
           "headers": {
             "Authorization": "Bearer ollama",
             "X-Model": "qwen-coder"

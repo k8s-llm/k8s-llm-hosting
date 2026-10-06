@@ -37,4 +37,22 @@ spec:
   persistentVolumeClaimRef: models-pvc
   mountPath: /data/models
   modelPath: ollama/qwen2.5-coder-1.5b
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama-qwen3-06b
+  namespace: default
+spec:
+  type: ExternalName
+  externalName: traefik.traefik.svc.cluster.local
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama-qwen25-coder
+  namespace: default
+spec:
+  type: ExternalName
+  externalName: traefik.traefik.svc.cluster.local
+---

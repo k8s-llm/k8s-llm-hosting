@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: &name-qwen ollama-qwnen3-0.6b
+  name: *name-qwen
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: *name-qwen
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: *name-qwen
+    spec:
+      containers:
+      - env:
+        - name: OLLAMA_MODELS
+          value: /data/models/ollama/qwen3-0.6b
+        image: ollama/ollama
+        name: ollama
+        ports:
+          - containerPort: 11434
+            name: llamaport
+            protocol: TCP
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1024M
+          limits:
+            cpu: 500m
+            memory: 1024M
+        volumeMounts:
+          - name: models-ro
+            mountPath: /data/models
+            readOnly: false
+      volumes:
+        - name: models-ro
+          persistentVolumeClaim:
+            claimName: models-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: &name-coder ollama-qwen2.5-coder-1.5b
+  name: *name-coder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: *name-coder
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: *name-coder
+    spec:
+      containers:
+      - env:
+        - name: OLLAMA_MODELS
+          value: /data/models/ollama/qwen2.5-coder-1.5b
+        image: ollama/ollama
+        name: ollama
+        ports:
+          - containerPort: 11434
+            name: llamaport
+            protocol: TCP
+        resources:
+          requests:
+            cpu: 1
+            memory: 1024M
+          limits:
+            cpu: 1
+            memory: 1024M
+        volumeMounts:
+          - name: models-ro
+            mountPath: /data/models
+            readOnly: false
+      volumes:
+        - name: models-ro
+          persistentVolumeClaim:
+            claimName: models-pvc
+---

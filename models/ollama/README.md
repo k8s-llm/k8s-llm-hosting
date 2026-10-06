@@ -20,3 +20,17 @@ services.yaml exposes deployments created by the model resources so we can acces
 We need services created manually now, since model kind does not yet create services and hpa by itself.
 
 
+---
+github-actions-different-ollamas.yaml is a file that contains models to be created by github action that tests an implementation in Github.
+In order to run that tests, pushes should me made to branches named: `test/*`, `testing/*` or `github-action-setup`.
+
+## Different models used by OpenWebUI
+
+As a tool to test, we are using OpenWebUI.
+
+It is important to be compliant with it, so we are consuming ollama managed models by using OpenAI inferface.
+
+In order to have OpenWebUI uniquely identifying models, we are using External Name services to create alternatve namings for traefik endpoint. This way each model is exposed by using a different url (and a specific header, since routing was based on it)
+
+As external name service were implemented later, maybe using header is obsolete and we can route based on host.
+
