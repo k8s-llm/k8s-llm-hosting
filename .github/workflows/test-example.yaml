@@ -32,6 +32,25 @@ jobs:
       - name: Download models
         run: |
           kubectl apply -f models/ollama/github-actions-different-ollamas.yaml
+
+
+          echo "Waiting for deployments to be ready..."
+          for i in {1..24}; do
+            d1_status=$(kubectl get deployment ollama-qwnen3-0.6b -o jsonpath='{.status.conditions[?(@.type=="Available")].status}')
+            d2_status=$(kubectl get deployment ollama-qwen2.5-coder-1.5b -o jsonpath='{.status.conditions[?(@.type=="Available")].status}')
+            if [[ "$d1_status" == "True" ]] && [[ "$d2_status" == "True"  ]]; then
+              echo "Deployments are ready!!"
+              exit 0
+            fi
+            sleep 5
+          done
+          
+          echo "Error: Deployments not ready after 2 mins"
+          kubectl describe deployment ollama-qwnen3-0.6b
+          kubectl describe deployment ollama-qwen2.5-coder-1.5b
+          exit 1
+
+
           kubectl exec $(kubectl get pod -l app=ollama-qwen2.5-coder-1.5b -o jsonpath='{.items[0].metadata.name}') -- ollama pull qwen2.5-coder:1.5b
           kubectl exec $(kubectl get pod -l app=ollama-qwnen3-0.6b jsonpath='{.items[0].metadata.name}') -- ollama pull qwen3:0.6b
           kubectl delete -f models/ollama/different-ollamas.yaml
