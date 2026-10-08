@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: qwen3-06b
+  namespace: default
+resources:
+  - ../base
+patches:
+  - path: ./patch.yaml
+nameSuffix: -qwen3-06b
+#  - target:
+#      kind: HelmRelease
+#      name: buddy-base
+#    path: ./patch-rename.yaml
+namespace: models

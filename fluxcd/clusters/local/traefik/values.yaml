@@ -1,0 +1,80 @@
+ingressRoute:
+  dashboard:
+    enabled: true
+    matchRule: Host(`dashboard.localhost`)
+    entryPoints:
+      - web
+providers:
+  kubernetesGateway:
+    enabled: true
+    experimentalChannel: false
+    labelSelector: "app.kubernetes.io/instance=traefik-models"
+ports:
+  web: 
+    exposedPort: 8080
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - resource:
+        name: memory
+        target:
+          averageUtilization: 90
+          type: Utilization
+      type: Resource
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 70
+          type: Utilization
+      type: Resource
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ template \"traefik.fullname\" . }}"
+commonLabels:
+  applications: model
+  author: Roger
+resources:
+  limits:
+    cpu: 200m
+    memory: 256M
+  requests:
+    cpu: 200m
+    memory: 256M
+
+service:
+  type: ClusterIP
+gateway:
+  enabled: true
+  name: model-gateway-traefik
+  labels:
+    app: models
+  listeners:
+    web:
+      namespacePolicy:
+        from: All
+gatewayClass:
+  enabled: true
+  name: traefik-models-class
+  labels:
+    app: *app_name
+additionalArguments:
+  - "--providers.kubernetesgateway.statusaddress.service.namespace=traefik"
+  - "--providers.kubernetesgateway.statusaddress.service.name=traefik"
+log:
+  general:
+    level: INFO
+    format: json # "common", "json", or null
+accessLog:
+  enabled: true
+  format: json # "common", "json", or null
+  addInternals: false
+  bufferingSize: 100
+  fields:
+    headers:
+      # Keep all the headers by default
+      defaultMode: keep
+      names:
+        Authorization: drop

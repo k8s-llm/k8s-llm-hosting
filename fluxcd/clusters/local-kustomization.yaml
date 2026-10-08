@@ -1,0 +1,30 @@
+## This file is to be executed in the local cluster, so it reads flux data from repository
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: flux-models-local-repo
+  namespace: flux-system
+spec:
+  interval: 15m
+  ref:
+    branch: main
+  url: https://github.com/k8s-llm/k8s-llm-hosting.git
+#  secretRef:
+#    name: include a pat ir needed
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: deployments-flux-models-local
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  path: ./fluxcd/clusters/local/
+  prune: true
+  retryInterval: 2m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-models-local-repo
+  timeout: 3m0s
+  wait: true
