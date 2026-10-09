@@ -4,6 +4,7 @@ metadata:
   name: flux-models-local-kustomization
   namespace: flux-system
 resources:
+  - ./commons/volume.yaml
   - ./qwen3-06b/
   - ./qwen25-coder/
   - ./traefik/
