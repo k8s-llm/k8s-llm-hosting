@@ -1,11 +1,3 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: external-name
-  namespace: default
-spec:
-  externalName: qwen25-coder-15b.traefik.svc.cluster.local
----
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:

@@ -8,7 +8,7 @@ providers:
   kubernetesGateway:
     enabled: true
     experimentalChannel: false
-    labelSelector: "app.kubernetes.io/instance=traefik-models"
+    labelSelector: "app.kubernetes.io/instance=traefik-traefik"
 ports:
   web: 
     exposedPort: 8080
