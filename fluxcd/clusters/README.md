@@ -2,7 +2,6 @@
 
 ## Installing local cluster
 
-Not needed: helm repo add traefik https://traefik.github.io/charts
 
 ``` bash
 kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/standard-install.yaml
@@ -11,7 +10,7 @@ helm install -n flux-system --create-namespace flux oci://ghcr.io/fluxcd-communi
 kubectl apply -f https://raw.githubusercontent.com/k8s-llm/k8s-model-operator/image-reference/dist/install.yaml
 kubectl create ns traefik
 kubectl create ns models
-kubectl apply -f local-kustomization.yaml
+kubectl apply -f ./fluxcd/clusters/local-kustomization.yaml
 
 ```
 

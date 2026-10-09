@@ -8,7 +8,7 @@ spec:
   releaseName: openwebui
   chart:
     spec:
-      chart: openwebui
+      chart: open-webui
       sourceRef:
         kind: HelmRepository
         name: openwebui
