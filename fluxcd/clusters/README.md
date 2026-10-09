@@ -19,10 +19,10 @@ In order to download models for this example, you should create pods that attach
 i.e.: 
 
 ```bash
-kubectl create -f models/ollama/different-ollamas.yaml
+kubectl create -f models/ollama/different-ollamas.yaml -n models
 kubectl exec $(kubectl get pod -l app=ollama-qwen2.5-coder-1.5b -o jsonpath='{.items[0].metadata.name}') -- ollama pull qwen2.5-coder:1.5b
 kubectl exec $(kubectl get pod -l app=ollama-qwnen3-0.6b jsonpath='{.items[0].metadata.name}') -- ollama pull qwen3:0.6b
-kubectl delete -f models/ollama/different-ollamas.yaml
+kubectl delete -f models/ollama/different-ollamas.yaml -n models
 ```
 
 
