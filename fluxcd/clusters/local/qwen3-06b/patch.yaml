@@ -7,7 +7,8 @@ spec:
   parentRefs:
   - group: gateway.networking.k8s.io
     kind: Gateway
-    name: traefik
+    name: model-gateway-traefik
+    namespace: traefik
   rules:
   - backendRefs:
     - group: ""
@@ -17,13 +18,10 @@ spec:
       port: 11434
       weight: 1
     matches:
-    - path:
-        type: PathPrefix
-        value: /
     - headers:
       - name: hostname
         type: Exact
-        value: qwen3-06b.traefik.svc.cluster.local
+        value: llm-qwen3-06b.traefik.svc.cluster.local
 ---
 apiVersion: llmmodel.host-llm.io/v1alpha1
 kind: Model
