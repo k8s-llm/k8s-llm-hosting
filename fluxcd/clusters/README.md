@@ -1,6 +1,6 @@
 # FluxCD clusters
 
-## Installing local cluster
+## Installing local cluster
 
 Not needed: helm repo add traefik https://traefik.github.io/charts
 
@@ -15,10 +15,19 @@ kubectl apply -f local-kustomization.yaml
 
 ```
 
-have to apply  traefik-helm-values-bff4mdhgm4
+In order to download models for this example, you should create pods that attach the created volume and download models (as done in github action for testing)
+
+i.e.: 
+
+```bash
+kubectl create -f models/ollama/different-ollamas.yaml
+kubectl exec $(kubectl get pod -l app=ollama-qwen2.5-coder-1.5b -o jsonpath='{.items[0].metadata.name}') -- ollama pull qwen2.5-coder:1.5b
+kubectl exec $(kubectl get pod -l app=ollama-qwnen3-0.6b jsonpath='{.items[0].metadata.name}') -- ollama pull qwen3:0.6b
+kubectl delete -f models/ollama/different-ollamas.yaml
+```
 
 
-FluxCD CLI
+## FluxCD CLI
 
 ```bash
 curl -s https://fluxcd.io/install.sh | sudo bash

@@ -6,7 +6,7 @@ Idea is to create a way to host LLM + agents + Viewer on k8s
 
 I want to store LLM models in a k8s cluster so they can be consumed from agents or event an UI, always locally, without accessing to a remote based API. 
 
-This does not mean that models should not browse the internet (do they? or would the agent do so?), but they should not inform anyone what is happening with them.
+This does not mean that models should not browse the internet but they should not inform anyone what is happening with them.
 
 ## Proposed architecture
 
@@ -18,24 +18,24 @@ Models can be downloaded to a shared volume using a "singleton" pod (or even eve
 Then my representation of an operative model is an ollama/llama.cpp/others deployment mounting that volume and using only one of those models.
 
 Those deployments will have an hpa definition that will scale based on a business metric, like connections, tokens per connection, or something like that.
+
 Of course, those will have a service that will let traffic. Should we have stickiness? Or context will come and go from the calls?
+
 How would I manage them? Well, each time we want to support a new model, I would:
 a) install a helm implementation to support the model
 b) have a general CRD and create new instances of the CRD when you want to support a new model: i.e. Kind: mymodel. An operator should receive a trigger when its created and propose the implementation.
 
 ## Networking
 In front of that set of deployments I'd like to have a router; but this router should not decide which model to use, but depending on a header or something in the messages, would redirect traffic.
+
 Why? All agents using ollama should access the same endpoint, but indicating a model (like it would do to any ollama implementation). The difference here is that each ollama will work with a single model. If not, pods will be serving many of them, sometimes simultaneously. Might not be scalable.
 
 Do I have a way to identify ollama protocol way of choosing the model?
 The way to identify such traffic is by inspecting the message; payload contains the model in a json object. This can be implemented with tinyLLM Proxy, or a custom middleware in traefik or even using envoy as gateway api implementation.
 
+If using OpenAI standard, you can set a custom header to choose model.
 
-But: 
-
-Otari would be an option for this work; can you indicate the model you'd like to use to otari?
-
-I think otari would replace all this functionality.
+Anyway, this was solved by using external naming for services.
 
 ## UI
 Open WebUI seems nice to at least have an interface to test the models. 
@@ -43,6 +43,9 @@ But we can also leverage its capabilities by using some agents behind and run wh
 
 ## Agents
 Hermes? OpenClaw? Other agents to host tasks in a company? 
+
+## Models management / governance
+We may include Otari to be in the middle of the communication.
 
 ## Monitoring
 Of course, we need to monitor everything. Sometimes logs might be verbose enough to try not to publish them. So we should have our own suite.
@@ -52,6 +55,10 @@ Have in mind that grafana should get some business metrics in order to feed hpa 
 ## Model routing
 Should we need it? Sure ... I'd trust Otari, would it run ok.
 
+
+## Local test using FluxCD
+
+Read [Fluxcd local](./fluxcd/clusters/local/README.md)
 
 ## Installing a local test
 
