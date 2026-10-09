@@ -44,7 +44,7 @@ But we can also leverage its capabilities by using some agents behind and run wh
 ## Agents
 Hermes? OpenClaw? Other agents to host tasks in a company? 
 
-## Models management / governance
+## Models management / governance
 We may include Otari to be in the middle of the communication.
 
 ## Monitoring
