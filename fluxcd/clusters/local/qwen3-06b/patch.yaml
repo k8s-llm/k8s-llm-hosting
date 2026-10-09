@@ -33,7 +33,6 @@ spec:
     - group: ""
       kind: Service
       name: model-qwen3-06b
-      namespace: models
 ---
 apiVersion: llmmodel.host-llm.io/v1alpha1
 kind: Model
