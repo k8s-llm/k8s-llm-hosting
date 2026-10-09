@@ -47,7 +47,7 @@ spec:
     version: 0.6b
   maxReplicas: 1
   minReplicas: 1
-  targetNamespace: default
+  targetNamespace: models
   persistentVolumeClaimRef: models-pvc
   mountPath: /data/models
   modelPath: ollama/qwen3-0.6b
