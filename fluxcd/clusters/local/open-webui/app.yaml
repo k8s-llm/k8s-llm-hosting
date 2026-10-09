@@ -1,0 +1,18 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openwebui
+  namespace: default
+spec:
+  interval: 5m
+  releaseName: openwebui
+  chart:
+    spec:
+      chart: openwebui
+      sourceRef:
+        kind: HelmRepository
+        name: openwebui
+        namespace: flux-system
+  valuesFrom:
+    - kind: ConfigMap
+      name: openwebui-helm-values

@@ -5,6 +5,7 @@ metadata:
   namespace: flux-system
 resources:
   - ./commons/volume.yaml
+  - ./open-webui/
   - ./qwen3-06b/
   - ./qwen25-coder/
   - ./traefik/
