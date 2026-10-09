@@ -13,7 +13,7 @@ spec:
   - backendRefs:
     - group: ""
       kind: Service
-      name: model
+      name: model-qwen25-coder-15b
       namespace: default
       port: 11434
       weight: 1

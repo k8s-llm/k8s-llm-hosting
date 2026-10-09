@@ -13,7 +13,7 @@ spec:
   - backendRefs:
     - group: ""
       kind: Service
-      name: model
+      name: model-qwen3-06b
       namespace: models
       port: 11434
       weight: 1
