@@ -23,6 +23,17 @@ spec:
         type: Exact
         value: llm-qwen25-coder-15b.model.svc.cluster.local
 ---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: model
+  namespace: default
+spec:
+  to:
+    - group: ""
+      kind: Service
+      name: model-qwen25-coder-15b
+---
 apiVersion: llmmodel.host-llm.io/v1alpha1
 kind: Model
 metadata:
