@@ -21,7 +21,7 @@ spec:
     - headers:
       - name: hostname
         type: Exact
-        value: llm-qwen3-06b.traefik.svc.cluster.local
+        value: llm-qwen3-06b.models.svc.cluster.local
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: ReferenceGrant

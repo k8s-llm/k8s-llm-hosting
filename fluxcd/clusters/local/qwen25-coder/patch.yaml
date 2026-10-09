@@ -21,7 +21,7 @@ spec:
     - headers:
       - name: hostname
         type: Exact
-        value: llm-qwen25-coder-15b.model.svc.cluster.local
+        value: llm-qwen25-coder-15b.models.svc.cluster.local
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: ReferenceGrant
