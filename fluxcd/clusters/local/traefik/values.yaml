@@ -59,7 +59,7 @@ gatewayClass:
   enabled: true
   name: traefik-models-class
   labels:
-    app: *app_name
+    app: traefik
 additionalArguments:
   - "--providers.kubernetesgateway.statusaddress.service.namespace=traefik"
   - "--providers.kubernetesgateway.statusaddress.service.name=traefik"
