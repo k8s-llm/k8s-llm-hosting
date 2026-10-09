@@ -7,3 +7,5 @@ resources:
   - ./qwen3-06b/
   - ./qwen25-coder/
   - ./traefik/
+configurations:
+  - kustomizeconfig.yaml
