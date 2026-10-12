@@ -1,0 +1,20 @@
+---
+apiVersion: llmmodel.host-llm.io/v1alpha1
+kind: Model
+metadata:
+  labels:
+    app.kubernetes.io/name: model
+  name: model
+  namespace: default
+spec:
+  provider: Ollama
+  llmModel:
+    name: qwen3
+    version: 0.6b
+  maxReplicas: 1
+  minReplicas: 1
+  targetNamespace: default
+  persistentVolumeClaimRef: models-pvc
+  mountPath: /data/models
+  modelPath: ollama/model
+---

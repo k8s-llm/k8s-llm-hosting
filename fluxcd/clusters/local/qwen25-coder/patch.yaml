@@ -1,0 +1,55 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: model
+  namespace: traefik
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: model-gateway-traefik
+    namespace: traefik
+  rules:
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: model-qwen25-coder-15b
+      namespace: models
+      port: 11434
+      weight: 1
+    matches:
+    - headers:
+      - name: hostname
+        type: RegularExpression
+        value: llm-qwen25-coder-15b.models.svc.cluster.local(:.*)?
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: model
+  namespace: default
+spec:
+  to:
+    - group: ""
+      kind: Service
+      name: model-qwen25-coder-15b
+---
+apiVersion: llmmodel.host-llm.io/v1alpha1
+kind: Model
+metadata:
+  labels:
+    app.kubernetes.io/name: model-qwen25-coder-15b
+  name: model
+  namespace: default
+spec:
+  provider: Ollama
+  llmModel:
+    name: qwen2.5-coder
+    version: 1.5b
+  maxReplicas: 1
+  minReplicas: 1
+  targetNamespace: models
+  persistentVolumeClaimRef: models-pvc
+  mountPath: /data/models
+  modelPath: ollama/qwen2.5-coder-1.5b
+---
