@@ -11,7 +11,7 @@ providers:
     labelSelector: "app.kubernetes.io/instance=traefik-traefik"
 ports:
   web: 
-    exposedPort: 8080
+    exposedPort: 11434
 autoscaling:
   enabled: true
   minReplicas: 2

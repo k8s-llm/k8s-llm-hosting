@@ -31,3 +31,12 @@ kubectl delete -f models/ollama/different-ollamas.yaml -n models
 ```bash
 curl -s https://fluxcd.io/install.sh | sudo bash
 ```
+
+
+## HTTPRoutes
+
+Note that HTTPRoutes in this example are redirecting traffic regarding the host name only. In fact they use regular expressions, since after both redirections, port is part of the hostname to Traefik.
+
+To be able to route using only hostname, we've used External Services, so we get an alias for traefik service with each model's name.
+
+This gets to a simpler configuration of OpenWebUI.
