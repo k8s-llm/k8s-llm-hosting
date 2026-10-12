@@ -1,18 +1,14 @@
 # Local LLM
 
-Idea is to create a way to host LLM + agents + Viewer on k8s
+Idea is to create a way to host Open Source LLM models in an owned Kubernetes cluster. All traffic to models is internal to the k8s cluster.
 
-## Motivation
-
-I want to store LLM models in a k8s cluster so they can be consumed from agents or event an UI, always locally, without accessing to a remote based API. 
-
-This does not mean that models should not browse the internet but they should not inform anyone what is happening with them.
+In order to do so, we propose using a CRD that will manage required assets to host the models with simple definitions, and a routing schema to centralize access to the models.
 
 ## Proposed architecture
 
 There are many things simultaneously, but I'll try to explain it in a sequence.
 
-## Models
+### Models
 Models can be downloaded to a shared volume using a "singleton" pod (or even eventual one, created and destroying when used) that pulls them from the internet. Any ollama pod will only read the model and not block or try to write the filesystem. If this is possible, how can I tell it "store the model in this directory"?
 
 Then my representation of an operative model is an ollama/llama.cpp/others deployment mounting that volume and using only one of those models.
@@ -25,34 +21,40 @@ How would I manage them? Well, each time we want to support a new model, I would
 a) install a helm implementation to support the model
 b) have a general CRD and create new instances of the CRD when you want to support a new model: i.e. Kind: mymodel. An operator should receive a trigger when its created and propose the implementation.
 
-## Networking
-In front of that set of deployments I'd like to have a router; but this router should not decide which model to use, but depending on a header or something in the messages, would redirect traffic.
+### Networking
+In front of that set of deployments I'd like to have a router; but this router should not decide which model to use, but depending on a header or hostname, would redirect traffic.
 
-Why? All agents using ollama should access the same endpoint, but indicating a model (like it would do to any ollama implementation). The difference here is that each ollama will work with a single model. If not, pods will be serving many of them, sometimes simultaneously. Might not be scalable.
+Why? All agents using ollama should access a similar endpoint, but indicating a model (like it would do to any ollama implementation). Each ollama will work with a single model. If not, pods will be serving many of them, sometimes simultaneously. Might not be scalable.
 
 Do I have a way to identify ollama protocol way of choosing the model?
+
 The way to identify such traffic is by inspecting the message; payload contains the model in a json object. This can be implemented with tinyLLM Proxy, or a custom middleware in traefik or even using envoy as gateway api implementation.
 
 If using OpenAI standard, you can set a custom header to choose model.
 
-Anyway, this was solved by using external naming for services.
+In the examples in this repo, this was solved by using external naming for services. So differentiation between models is done by hostname.
 
-## UI
+## Simple Installation using FluxCD
+
+Follow [Fluxcd local](./fluxcd/clusters/local/README.md)
+
+## Additional architecture
+### UI
 Open WebUI seems nice to at least have an interface to test the models. 
 But we can also leverage its capabilities by using some agents behind and run what we need
 
-## Agents
+### Agents
 Hermes? OpenClaw? Other agents to host tasks in a company? 
 
-## Models management / governance
+### Models management / governance
 We may include Otari to be in the middle of the communication.
 
-## Monitoring
+### Monitoring
 Of course, we need to monitor everything. Sometimes logs might be verbose enough to try not to publish them. So we should have our own suite.
 Grafana/Loki sounds nice.
 Have in mind that grafana should get some business metrics in order to feed hpa (Not sure if just cpu + mem will be enough)
 
-## Model routing
+### Model routing
 Should we need it? Sure ... I'd trust Otari, would it run ok.
 
 
@@ -60,7 +62,7 @@ Should we need it? Sure ... I'd trust Otari, would it run ok.
 
 Read [Fluxcd local](./fluxcd/clusters/local/README.md)
 
-## Installing a local test
+## Installing a local test without FluxCD
 
 1) Install Gateway API dependencies
 
@@ -144,7 +146,7 @@ open-webui as a web viewer
 
 
 
-#ollama-k8s
+## ollama-k8s
 
 this project aims at configuring ollama + kubectl-ai client in a kubernetes cluster in order to have an LLM operating the k8s cluster.
 
@@ -154,4 +156,3 @@ Download model:
 kubectl exec ollama-59f8f464dd-sw5jw -- ollama pull qwen3:0.6B
 
 kubectl-ai --llm-provider ollama --model qwen3:0.6B --enable-tool-use-shim
-
