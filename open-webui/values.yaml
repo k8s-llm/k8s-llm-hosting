@@ -5,8 +5,8 @@ ollamaUrls:
 
 enableOpenaiApi: true
 openaiBaseApiUrls: 
-  - http://llm-qwen3-06b.models.svc.cluster.local:11434/v1
-  - http://llm-qwen25-coder.models.svc.cluster.local:11434/v1/
+  - http://ollama-qwen3-06b.default.svc.cluster.local:80/v1
+  - http://ollama-qwen25-coder.default.svc.cluster.local:80/v1/
 openaiApiKeys:
   - ollama
   - ollama
@@ -21,3 +21,19 @@ extraEnvVars:
   - name: ENABLE_PERSISTENT_CONFIG
     value: "False"
 
+  - name: OPENAI_API_CONFIGS
+    value: >-
+      {
+        "http://ollama-qwen3-06b.default.svc.cluster.local:80/v1": {
+          "headers": { 
+            "Authorization": "Bearer ollama",
+            "X-Model": "qwen3"
+          }
+        },
+        "http://ollama-qwen25-coder.default.svc.cluster.local:80/v1/": {
+          "headers": {
+            "Authorization": "Bearer ollama",
+            "X-Model": "qwen-coder"
+          }
+        }
+      }
