@@ -19,7 +19,7 @@ spec:
       weight: 1
     matches:
     - headers:
-      - name: hostname
+      - name: X-Forwarded-Host
         type: RegularExpression
         value: model.traefik.svc.cluster.local(:.*)?
 ---
