@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: nemotron-nano
+  namespace: default
+resources:
+  - ../base
+patches:
+  - path: ./patch.yaml
+nameSuffix: -nemotron-3-nano-4bb
+#  - target:
+#      kind: HelmRelease
+#      name: buddy-base
+#    path: ./patch-rename.yaml
+namespace: models
