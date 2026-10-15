@@ -7,7 +7,7 @@ resources:
   - ../base
 patches:
   - path: ./patch.yaml
-nameSuffix: -nemotron-3-nano-4bb
+nameSuffix: -nemotron-3-nano-4b
 #  - target:
 #      kind: HelmRelease
 #      name: buddy-base
