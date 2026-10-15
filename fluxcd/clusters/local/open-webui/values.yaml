@@ -7,7 +7,9 @@ enableOpenaiApi: true
 openaiBaseApiUrls: 
   - http://llm-qwen3-06b.models.svc.cluster.local:11434/v1
   - http://llm-qwen25-coder-15b.models.svc.cluster.local:11434/v1/
+  - http://llm-nemotron-3-nano-4bb.models.svc.cluster.local:11434/v1/
 openaiApiKeys:
+  - ollama
   - ollama
   - ollama
 extraEnvVars:
