@@ -51,5 +51,5 @@ spec:
   targetNamespace: models
   persistentVolumeClaimRef: models-pvc
   mountPath: /data/models
-  modelPath: ollama/model-nemotron-3-nano-4b
+  modelPath: ollama/nemotron-3-nano-4b
 ---
